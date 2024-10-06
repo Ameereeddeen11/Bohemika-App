@@ -6,7 +6,7 @@ export default function CustomButton(props) {
     return (
         <TouchableOpacity 
             onPress={props.handlePress}
-            className={`bg-sky-500/100 rounded-xl min-h-[62px] justify-center items-center`}>
+            className={`bg-sky-500/100 rounded-xl min-h-[62px] justify-center items-center shadow-md`}>
             <Text className={`text-slate-50 font-psemibold text-base`}>{props.title}</Text>
         </TouchableOpacity>
     )

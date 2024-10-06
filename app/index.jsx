@@ -19,19 +19,19 @@ export default function Index() {
     }
     
     return (
-        <SafeAreaView>
+        <SafeAreaView className="bg-white">
             <ScrollView contentContainerStyle={{height: '100%'}}>
-                <View className="flex-1 bg-gray-100 justify-center px-5">
+                <View className="flex-1 justify-center px-5">
                     <Image
-                        source={require('../assets/images/logo.jpg')}
-                        className="w-32 h-32 mb-6 mx-auto"
+                        source={require('../assets/images/logo.png')}
+                        className="w-52 h-32 mb-6 mx-auto"
                         resizeMode="contain"
                     />
                     <Text className="text-center text-3xl font-bold text-gray-800 mb-8">
                         Vítej zpět!
                     </Text>
                     <TextInput
-                        className="h-12 bg-white px-4 mb-5 rounded-lg border border-gray-300 text-base"
+                        className="h-12 bg-white px-4 mb-5 rounded-lg border border-gray-300 text-base shadow-md"
                         placeholder="Email"
                         value={username}
                         onChangeText={setUsername}
@@ -40,17 +40,16 @@ export default function Index() {
                         placeholderTextColor="#aaa"
                     />
                     <TextInput
-                        className="h-12 bg-white px-4 mb-5 rounded-lg border border-gray-300 text-base"
+                        className="h-12 bg-white px-4 mb-5 rounded-lg border border-gray-300 text-base shadow-md"
                         placeholder="Heslo"
                         value={password}
                         onChangeText={setPassword}
                         secureTextEntry
                         placeholderTextColor="#aaa"
                     />
-                    <CustomButton title="Login" handlePress={submit} />
+                    <CustomButton title="Přihlasit se" handlePress={submit} />
                 </View>
             </ScrollView>
-            <StatusBar style='dark'/>
         </SafeAreaView>
     );
 }  

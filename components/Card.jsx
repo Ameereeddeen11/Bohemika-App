@@ -8,8 +8,8 @@ export default function Card() {
         <View className="flex-row p-4 bg-white rounded-lg shadow-md h-60">
             <View className="justify-center">
                 <Image
-                    source={require('../assets/images/logo.jpg')}
-                    className="w-20 h-20 rounded-full"
+                    source={require('../assets/images/logo2.png')}
+                    className="w-20 h-20"
                 />
             </View>
 
