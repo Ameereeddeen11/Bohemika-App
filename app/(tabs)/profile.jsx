@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 
 export default function Profile() {
   const submit = () => {
-    router.replace('/signin');
+    router.replace('/');
   } 
   return (
     <View className="flex-1 bg-gray-100 p-4">
