@@ -29,9 +29,9 @@ export default function Index() {
                             style={{ width: 200, height: 100, marginBottom: 30, alignSelf: 'center' }}
                             resizeMode="contain"
                         />
-                        <Text style={{ textAlign: 'center', fontSize: 24, fontWeight: 'bold', color: '#333', marginBottom: 20 }}>
+                        {/* <Text style={{ textAlign: 'center', fontSize: 24, fontWeight: 'bold', color: '#333', marginBottom: 20 }}>
                             Vítej zpět!
-                        </Text>
+                        </Text> */}
                         <TextInput
                             style={{
                                 height: 50,

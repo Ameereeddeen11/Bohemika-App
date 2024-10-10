@@ -3,23 +3,21 @@ import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, Button } f
 import { router } from 'expo-router';
 import Collapsible from 'react-native-collapsible';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Header from '@/components/Header';
 
 export default function Profile() {
   const submit = () => {
     router.replace('/');
   } 
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const submit2 = () => {
     setCollapsed(!collapsed);
   }
   return (
     <SafeAreaView>
+      <Header/>
       <ScrollView className="p-4" contentContainerStyle={{paddingBottom: 20}}>
         <View className="flex-1 bg-gray-100 p-4">
-          <View className="flex-row items-center justify-between mb-6">
-            <Text className="text-2xl font-bold">Profil</Text>
-          </View>
-
           <View className="items-center mb-6">
             <Image
               source={require('../../assets/images/unknown.jpg')} // Nahraďte URL vaší profilovou fotografií
@@ -43,8 +41,8 @@ export default function Profile() {
               <Text className="text-gray-700">Trvale bydliste: Praha 7</Text>
             </View>
           </View>
-          <View style={styles.container}>
-            <Button title={collapsed ? 'Show More' : 'Show Less'} onPress={submit2} />
+          <View className="p-5 rounded-lg shadow">
+            <Button title={!(collapsed) ? 'Ukazat min' : 'Ukazat vic'} onPress={submit2} />
             <Collapsible collapsed={collapsed} className="space-y-4">
               <View className="bg-white p-4 rounded-lg shadow">
                 <Text className="text-gray-700">Datum narození: 1.1.1990</Text>
