@@ -1,5 +1,4 @@
-import { View, Text } from 'react-native';
-import { Tabs, Redirect } from 'expo-router';
+import { Tabs } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import Icon from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/Ionicons';
