@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { router, Link } from 'expo-router';
+import Badge from './Badge';
+import { router } from 'expo-router';
 
 export default function Header() {
     const submit = () => {
@@ -14,8 +15,8 @@ export default function Header() {
             </View>
             <View className="flex-col justify-center items-end">
                 <View className="flex-row justify-between">
-                    <TouchableOpacity className="px-3"><Icon name="bell" size={30} color="white" /></TouchableOpacity>
-                    <TouchableOpacity className="scale-x-[-1]" onPress={submit}><Icon name="chat" size={30} color="white" /></TouchableOpacity>
+                    <TouchableOpacity className="px-3"><Icon name="bell" size={25} color="white" /></TouchableOpacity>
+                    <TouchableOpacity onPress={submit}><Badge number={23}/></TouchableOpacity>
                 </View>
             </View>
         </View>
