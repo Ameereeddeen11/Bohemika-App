@@ -1,13 +1,30 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useEffect } from 'react';
+import { Text, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { styled } from 'nativewind';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Card from '../../components/Card';
 import Header from '../../components/Header';
+import * as SecureStore from 'expo-secure-store';
+import { router } from 'expo-router';
 
 export default function home() {
-    const Cards = {}
+    useEffect(() => {
+        const getToken = async () => {
+          try {
+            const storedToken = await SecureStore.getItemAsync('token');
+    
+            if (!storedToken) {
+              Alert.alert('Token nenalezen', 'Přihlašte se znovu.');
+              router.replace('/');
+              return;
+            }
+          } catch (error) {
+            Alert.alert('Chyba', 'Nepodařilo se načíst token.');
+          }
+        };
+    
+        getToken();
+      }, []);
+
     return (
         <SafeAreaView>
             <Header/>
@@ -19,52 +36,3 @@ export default function home() {
         </SafeAreaView>
     )
 }
-
-const styles = styled({
-    container: {
-        flex: 1,
-        backgroundColor: '#f0f0f0',
-    },
-    card: {
-        backgroundColor: '#fff',
-        padding: 10,
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-        marginBottom: 10,
-    },
-    cardTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 5,
-    },
-    cardText: {
-        fontSize: 14,
-        color: '#333',
-    },
-    cardFooter: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: 10,
-    },
-    cardFooterText: {
-        fontSize: 12,
-        color: '#666',
-    },
-    cardFooterButton: {
-        backgroundColor: '#f0f0f0',
-        padding: 5,
-        borderRadius: 5,
-    },
-    cardFooterButtonText: {
-        color: '#333',
-        fontSize: 12,
-    }
-});

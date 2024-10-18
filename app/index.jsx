@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TextInput, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Image, TextInput, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import CustomButton from '../components/CustomButton';
+import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
 
 export default function Index() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const submit = () => {
-        if (username === 'admin' && password === 'admin') {
+
+    const handleLogin = async () => {
+        try {
+            const response = await axios.post('https://mba.bsfaplikace.cz/Auth/login', { username, password });
+            await SecureStore.setItemAsync('token', response.data.accessToken);
             router.replace('/home');
-        }
-        else {
+        } catch (error) {
             Alert.alert('Invalid credentials');
         }
-    }
+    };
     
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -29,9 +33,6 @@ export default function Index() {
                             style={{ width: 200, height: 100, marginBottom: 30, alignSelf: 'center' }}
                             resizeMode="contain"
                         />
-                        {/* <Text style={{ textAlign: 'center', fontSize: 24, fontWeight: 'bold', color: '#333', marginBottom: 20 }}>
-                            Vítej zpět!
-                        </Text> */}
                         <TextInput
                             style={{
                                 height: 50,
@@ -67,7 +68,7 @@ export default function Index() {
                             secureTextEntry
                             placeholderTextColor="#aaa"
                         />
-                        <CustomButton title="Přihlasit se" handlePress={submit} />
+                        <CustomButton title="Přihlasit se" handlePress={handleLogin} />
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>

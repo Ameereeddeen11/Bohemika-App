@@ -4,14 +4,16 @@ import { router } from 'expo-router';
 import Collapsible from 'react-native-collapsible';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '@/components/Header';
+import * as SecureStore from 'expo-secure-store';
 
 export default function Profile() {
-  const submit = () => {
-    router.replace('/');
-  } 
   const [collapsed, setCollapsed] = useState(true);
-  const submit2 = () => {
+  const submit = () => {
     setCollapsed(!collapsed);
+  }
+  const logout = async () => {
+    await SecureStore.deleteItemAsync('token');
+    router.replace('/');
   }
   return (
     <SafeAreaView>
@@ -20,7 +22,7 @@ export default function Profile() {
         <View className="flex-1 bg-gray-100 p-4">
           <View className="items-center mb-6">
             <Image
-              source={require('../../assets/images/unknown.jpg')} // Nahraďte URL vaší profilovou fotografií
+              source={require('../../assets/images/unknown.jpg')}
               className="w-32 h-32 rounded-full"
             />
             <Text className="mt-4 text-xl font-semibold">Jan Novák</Text>
@@ -42,7 +44,7 @@ export default function Profile() {
             </View>
           </View>
           <View className="p-5 rounded-lg shadow">
-            <Button title={!(collapsed) ? 'Ukazat min' : 'Ukazat vic'} onPress={submit2} />
+            <Button title={!(collapsed) ? 'Ukazat min' : 'Ukazat vic'} onPress={submit} />
             <Collapsible collapsed={collapsed} className="space-y-4">
               <View className="bg-white p-4 rounded-lg shadow">
                 <Text className="text-gray-700">Datum narození: 1.1.1990</Text>
@@ -62,7 +64,7 @@ export default function Profile() {
             </Collapsible>
           </View>
 
-          <TouchableOpacity className="mt-auto bg-red-600 p-4 rounded-lg shadow" onPress={submit}>
+          <TouchableOpacity className="mt-auto bg-red-600 p-4 rounded-lg shadow" onPress={logout}>
             <Text className="text-white text-center text-lg">Odhlásit se</Text>
           </TouchableOpacity>
         </View>
