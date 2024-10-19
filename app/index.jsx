@@ -14,6 +14,7 @@ export default function Index() {
         try {
             const response = await axios.post('https://mba.bsfaplikace.cz/Auth/login', { username, password });
             await SecureStore.setItemAsync('token', response.data.accessToken);
+            await SecureStore.setItemAsync('refreshToken', response.data.refreshToken);
             router.replace('/home');
         } catch (error) {
             Alert.alert('Invalid credentials');

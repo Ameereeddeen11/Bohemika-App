@@ -13,6 +13,7 @@ export default function Profile() {
   }
   const logout = async () => {
     await SecureStore.deleteItemAsync('token');
+    await SecureStore.deleteItemAsync('refreshToken');
     router.replace('/');
   }
   return (
