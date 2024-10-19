@@ -1,70 +1,77 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useEffect } from 'react';
+import { Text, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { styled } from 'nativewind';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Card from '../../components/Card';
 import Header from '../../components/Header';
+import * as SecureStore from 'expo-secure-store';
+import { router } from 'expo-router';
 
-export default function home() {
-    const Cards = {}
-    return (
-        <SafeAreaView>
-            <Header/>
-            <ScrollView className="p-4" contentContainerStyle={{paddingBottom: 20}}>
-                <Card/><Text>{"\n"}</Text>
-                <Card/><Text>{"\n"}</Text>
-                <Card/><Text>{"\n"}</Text>
-            </ScrollView>
-        </SafeAreaView>
-    )
+async function refreshToken(storedToken, storedRefreshToken) {
+  const refreshToken = await fetch('https://mba.bsfaplikace.cz/Auth/refresh', {
+    method: 'POST',
+    body: JSON.stringify({ 
+      accessToken: storedToken,
+      refreshToken: storedRefreshToken
+    }),
+  })
+  if (response.status === 200) {
+    const data = await response.json();
+    SecureStore.deleteItemAsync('token');
+    SecureStore.setItemAsync('token', data.accessToken);
+  } else {
+    SecureStore.deleteItemAsync('token');
+    SecureStore.deleteItemAsync('refreshToken');
+    router.replace('/');
+  }
 }
 
-const styles = styled({
-    container: {
-        flex: 1,
-        backgroundColor: '#f0f0f0',
-    },
-    card: {
-        backgroundColor: '#fff',
-        padding: 10,
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
+export default function home() {
+  const storedToken = SecureStore.getItemAsync('token');
+  const storedRefreshToken = SecureStore.getItemAsync('refreshToken');
+  useEffect(() => {
+      const getToken = async () => {
+        try {
+          if (!storedToken) {
+            Alert.alert('Token nenalezen', 'Přihlašte se znovu.');
+            router.replace('/');
+            return;
+          }
+        } catch (error) {
+          Alert.alert('Chyba', 'Nepodařilo se načíst token.');
+        }
+      };
+      getToken();
+    }, 
+  []);
+    
+  useEffect(() => {
+    const infoCard = async () => {
+      const response = await fetch('https://mba.bsfaplikace.cz/InfoCard', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${storedToken}`,
         },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-        marginBottom: 10,
-    },
-    cardTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 5,
-    },
-    cardText: {
-        fontSize: 14,
-        color: '#333',
-    },
-    cardFooter: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: 10,
-    },
-    cardFooterText: {
-        fontSize: 12,
-        color: '#666',
-    },
-    cardFooterButton: {
-        backgroundColor: '#f0f0f0',
-        padding: 5,
-        borderRadius: 5,
-    },
-    cardFooterButtonText: {
-        color: '#333',
-        fontSize: 12,
+      })
+      if (response.status === 401) {
+        refreshToken(storedToken, storedRefreshToken);
+      } else {
+        SecureStore.deleteItemAsync('token');
+        SecureStore.deleteItemAsync('refreshToken');
+        navigator.replace('/');
+        return;
+      }
     }
-});
+    infoCard();
+  })
+
+  return (
+      <SafeAreaView>
+          <Header/>
+          <ScrollView className="p-4" contentContainerStyle={{paddingBottom: 20}}>
+              <Card/><Text>{"\n"}</Text>
+              <Card/><Text>{"\n"}</Text>
+              <Card/><Text>{"\n"}</Text>
+          </ScrollView>
+      </SafeAreaView>
+  )
+}
