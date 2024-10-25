@@ -6,7 +6,7 @@ import CustomButton from '../components/CustomButton';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-export default function Login() {
+export default function Index() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
