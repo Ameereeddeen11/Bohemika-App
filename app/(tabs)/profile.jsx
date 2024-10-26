@@ -1,13 +1,52 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, Button } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
-import Collapsible from 'react-native-collapsible';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Header from '@/components/Header';
+import Header from '../../components/Header';
+import UserInfo from '../../components/UserInfo';
 import * as SecureStore from 'expo-secure-store';
+import Info from '../../components/Info';
 
 export default function Profile() {
-  const [collapsed, setCollapsed] = useState(true);
+  const info = [
+    {
+      'title': 'Telefon',
+      'info': '+420 123 456 789'
+    },
+    {
+      'title': 'Adresa',
+      'info': 'Ulice 123, Město, PSČ'
+    },
+    {
+      'title': 'Číslo pojištění',
+      'info': '987654321'
+    },
+    {
+      'title': 'Trvale bydliste',
+      'info': 'Praha 7'
+    }
+  ];
+
+  const info2 = [
+    {
+      'title': 'Telefon',
+      'info': '+420 123 456 789'
+    },
+    {
+      'title': 'Adresa',
+      'info': 'Ulice 123, Město, PSČ'
+    },
+    {
+      'title': 'Číslo pojištění',
+      'info': '987654321'
+    },
+    {
+      'title': 'Trvale bydliste',
+      'info': 'Praha 7'
+    }
+  ]
+
+  const [collapsed, setCollapsed] = useState(false);
   const submit = () => {
     setCollapsed(!collapsed);
   }
@@ -21,48 +60,17 @@ export default function Profile() {
       <Header/>
       <ScrollView className="p-4" contentContainerStyle={{paddingBottom: 20}}>
         <View className="flex-1 bg-gray-100 p-4">
-          <View className="items-center mb-6">
-            <Image
-              source={require('../../assets/images/unknown.jpg')}
-              className="w-32 h-32 rounded-full"
-            />
-            <Text className="mt-4 text-xl font-semibold">Jan Novák</Text>
-            <Text className="text-gray-600">jan.novak@example.com</Text>
-          </View>
-
+          <UserInfo firstname="Jan" lastname="Novak" email="jan.novak@email.cz" />
           <View className="space-y-4">
-            <View className="bg-white p-4 rounded-lg shadow">
-              <Text className="text-gray-700">Telefon: +420 123 456 789</Text>
-            </View>
-            <View className="bg-white p-4 rounded-lg shadow">
-              <Text className="text-gray-700">Adresa: Ulice 123, Město, PSČ</Text>
-            </View>
-            <View className="bg-white p-4 rounded-lg shadow">
-              <Text className="text-gray-700">Číslo pojištění: 987654321</Text>
-            </View>
-            <View className="bg-white p-4 rounded-lg shadow">
-              <Text className="text-gray-700">Trvale bydliste: Praha 7</Text>
-            </View>
+            { info.map((info) => <Info title={info.title} info={info.info} /> ) }
           </View>
-          <View className="p-5 rounded-lg shadow">
-            <Button title={!(collapsed) ? 'Ukazat min' : 'Ukazat vic'} onPress={submit} />
-            <Collapsible collapsed={collapsed} className="space-y-4">
-              <View className="bg-white p-4 rounded-lg shadow">
-                <Text className="text-gray-700">Datum narození: 1.1.1990</Text>
-              </View>
-              <View className="bg-white p-4 rounded-lg shadow">
-                <Text className="text-gray-700">Rodné číslo: 900101/1234</Text>
-              </View>
-              <View className="bg-white p-4 rounded-lg shadow">
-                <Text className="text-gray-700">Pohlaví: Muž</Text>
-              </View>
-              <View className="bg-white p-4 rounded-lg shadow">
-                <Text className="text-gray-700">Výška: 180 cm</Text>
-              </View>
-              <View className="bg-white p-4 rounded-lg shadow">
-                <Text className="text-gray-700">Váha: 80 kg</Text>
-              </View>
-            </Collapsible>
+          <View className="space-y-4">
+            <View style={collapsed ? styles.showView : styles.nowShowView}>
+              { info2.map((info) => <Info title={info.title} info={info.info} /> ) }
+            </View>
+            <TouchableOpacity onPress={submit} className='my-4'>
+              <Text className="text-blue-500 text-center text-lg">{!(collapsed) ? 'Ukazat vic' : 'Ukazat min'}</Text>
+            </TouchableOpacity>
           </View>
 
           <TouchableOpacity className="mt-auto bg-red-600 p-4 rounded-lg shadow" onPress={logout}>
@@ -77,5 +85,11 @@ export default function Profile() {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+  },
+  showView: {
+    display: 'block',
+  },
+  nowShowView: {
+    display: 'none',
   }
 });
