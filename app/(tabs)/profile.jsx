@@ -72,7 +72,6 @@ export default function Profile() {
               <Text className="text-blue-500 text-center text-lg">{!(collapsed) ? 'Ukazat vic' : 'Ukazat min'}</Text>
             </TouchableOpacity>
           </View>
-
           <TouchableOpacity className="mt-auto bg-red-600 p-4 rounded-lg shadow" onPress={logout}>
             <Text className="text-white text-center text-lg">Odhlásit se</Text>
           </TouchableOpacity>

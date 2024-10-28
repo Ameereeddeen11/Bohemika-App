@@ -58,7 +58,6 @@ export default function home() {
         SecureStore.deleteItemAsync('token');
         SecureStore.deleteItemAsync('refreshToken');
         navigator.replace('/');
-        return;
       }
     }
     infoCard();
