@@ -17,7 +17,7 @@ export default function Index() {
             await SecureStore.setItemAsync('refreshToken', response.data.refreshToken);
             router.replace('/home');
         } catch (error) {
-            Alert.alert('Invalid credentials');
+            console.error(error);
         }
     };
     
