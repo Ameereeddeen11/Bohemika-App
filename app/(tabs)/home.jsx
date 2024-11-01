@@ -23,21 +23,14 @@ export default function home() {
 
   useEffect(() => {
     const infoContract = async () => {
-      try {
-        const request = await fetch(
-          'https://mba.bsfaplikace.cz/Contract',
-          {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${storedToken}`,
-            },
-          }
-        );
-        const result = await request.json();
-        setData(result);
-      } catch (error) {
-        console.error(error);
-      }
+      const response = await fetch('https://mba.bsfaplikace.cz/Contract', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${storedToken}`,
+        },
+      })
+      const result = await response.json();
+      setData(result);
     }
     infoContract();
   })

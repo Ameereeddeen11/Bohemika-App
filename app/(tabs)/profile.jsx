@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,24 +8,24 @@ import * as SecureStore from 'expo-secure-store';
 import Info from '../../components/Info';
 
 export default function Profile() {
-  const info = [
-    {
-      'title': 'Telefon',
-      'info': '+420 123 456 789'
-    },
-    {
-      'title': 'Adresa',
-      'info': 'Ulice 123, Město, PSČ'
-    },
-    {
-      'title': 'Číslo pojištění',
-      'info': '987654321'
-    },
-    {
-      'title': 'Trvale bydliste',
-      'info': 'Praha 7'
-    }
-  ];
+  // const info = [
+  //   {
+  //     'title': 'Telefon',
+  //     'info': '+420 123 456 789'
+  //   },
+  //   {
+  //     'title': 'Adresa',
+  //     'info': 'Ulice 123, Město, PSČ'
+  //   },
+  //   {
+  //     'title': 'Číslo pojištění',
+  //     'info': '987654321'
+  //   },
+  //   {
+  //     'title': 'Trvale bydliste',
+  //     'info': 'Praha 7'
+  //   }
+  // ];
 
   const info2 = [
     {
@@ -46,6 +46,46 @@ export default function Profile() {
     }
   ]
 
+  const [data, setData] = useState([]);
+  const [accesstoken, setToken] = useState('');
+  const [refreshToken, setRefreshToken] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = await SecureStore.getItemAsync('token');
+      const refreshToken = await SecureStore.getItemAsync('refreshToken');
+      if (token) {
+        setToken(token);
+      }
+      setRefreshToken(refreshToken);
+    };
+    fetchData();
+  }, []);
+  
+  useEffect(() => {
+    if (accesstoken) { // Only fetch data if accesstoken is available
+      const fetchData = async () => {
+        try {
+          const response = await fetch('https://mba.bsfaplikace.cz/Client/profile', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${accesstoken}`
+            }
+          });
+          if (!response.ok) {
+            console.error("Error fetching profile data:", response.status, response.statusText);
+            return;
+          }
+          const data2 = await response.json();
+          setData(data2);
+        } catch (error) {
+          console.error("Error parsing profile data:", error);
+        }
+      };
+      fetchData();
+    }
+  }, [accesstoken]);
+  
   const [collapsed, setCollapsed] = useState(false);
   const submit = () => {
     setCollapsed(!collapsed);
@@ -60,13 +100,20 @@ export default function Profile() {
       <Header/>
       <ScrollView className="p-4" contentContainerStyle={{paddingBottom: 20}}>
         <View className="flex-1 bg-gray-100 p-4">
-          <UserInfo firstname="Jan" lastname="Novak" email="jan.novak@email.cz" />
+          <UserInfo firstname={data.firstname} lastname={data.lastname} email={data.email} />
           <View className="space-y-4">
-            { info.map((info) => <Info title={info.title} info={info.info} /> ) }
+            {
+              Object.entries(data).map(([key, value], index) => {
+                if (index < 4) {
+                  return null;
+                }
+                return <Info key={index} title={key} info={value} />;
+              })
+            }
           </View>
           <View className="space-y-4">
             <View style={collapsed ? styles.showView : styles.nowShowView}>
-              { info2.map((info) => <Info title={info.title} info={info.info} /> ) }
+              { info2.map((info, index) => <Info key={index} title={info.title} info={info.info} /> ) }
             </View>
             <TouchableOpacity onPress={submit} className='my-4'>
               <Text className="text-blue-500 text-center text-lg">{!(collapsed) ? 'Ukazat vic' : 'Ukazat min'}</Text>
