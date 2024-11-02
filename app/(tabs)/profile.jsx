@@ -95,6 +95,17 @@ export default function Profile() {
     await SecureStore.deleteItemAsync('refreshToken');
     router.replace('/');
   }
+
+  const modifiedData = {
+    jmeno: data.firstname,
+    prijmeni: data.lastname,
+    email: data.email,
+    telefon: data.mobile,
+    narozeniny: data.birthdate,
+    'trvale bydliste': data.permanentAddress,
+    'tehdejsi bydliste': data.correspondenceAddress
+  }
+
   return (
     <SafeAreaView>
       <Header/>
@@ -103,22 +114,22 @@ export default function Profile() {
           <UserInfo firstname={data.firstname} lastname={data.lastname} email={data.email} />
           <View className="space-y-4">
             {
-              Object.entries(data).map(([key, value], index) => {
-                if (index < 4) {
-                  return null;
-                }
+              Object.entries(modifiedData).map(([key, value], index) => {
+                // if (index < 4) {
+                //   return null;
+                // }
                 return <Info key={index} title={key} info={value} />;
               })
             }
           </View>
-          <View className="space-y-4">
+          {/* <View className="space-y-4">
             <View style={collapsed ? styles.showView : styles.nowShowView}>
               { info2.map((info, index) => <Info key={index} title={info.title} info={info.info} /> ) }
             </View>
             <TouchableOpacity onPress={submit} className='my-4'>
               <Text className="text-blue-500 text-center text-lg">{!(collapsed) ? 'Ukazat vic' : 'Ukazat min'}</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
           <TouchableOpacity className="mt-auto bg-red-600 p-4 rounded-lg shadow" onPress={logout}>
             <Text className="text-white text-center text-lg">Odhlásit se</Text>
           </TouchableOpacity>
