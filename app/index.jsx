@@ -17,7 +17,7 @@ export default function Index() {
             await SecureStore.setItemAsync('refreshToken', response.data.refreshToken);
             router.replace('/home');
         } catch (error) {
-            console.error(error);
+            Alert.alert('Chyba', 'Nepodařilo se přihlásit');
         }
     };
     

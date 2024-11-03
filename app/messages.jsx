@@ -5,6 +5,7 @@ import Header from '../components/Header';
 export default function Messages() {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+            <Header/>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{ flex: 1, justifyContent: 'center', paddingHorizontal: 20 }}>
                     <Text style={{ textAlign: 'center', fontSize: 24, fontWeight: 'bold', color: '#333', marginBottom: 20 }}>

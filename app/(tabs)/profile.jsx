@@ -8,25 +8,6 @@ import * as SecureStore from 'expo-secure-store';
 import Info from '../../components/Info';
 
 export default function Profile() {
-  // const info = [
-  //   {
-  //     'title': 'Telefon',
-  //     'info': '+420 123 456 789'
-  //   },
-  //   {
-  //     'title': 'Adresa',
-  //     'info': 'Ulice 123, Město, PSČ'
-  //   },
-  //   {
-  //     'title': 'Číslo pojištění',
-  //     'info': '987654321'
-  //   },
-  //   {
-  //     'title': 'Trvale bydliste',
-  //     'info': 'Praha 7'
-  //   }
-  // ];
-
   const info2 = [
     {
       'title': 'Telefon',
@@ -79,7 +60,7 @@ export default function Profile() {
           const data2 = await response.json();
           setData(data2);
         } catch (error) {
-          console.error("Error parsing profile data:", error);
+          Alert.alert('Error', 'Failed to fetch profile data');
         }
       };
       fetchData();
@@ -109,15 +90,18 @@ export default function Profile() {
   return (
     <SafeAreaView>
       <Header/>
-      <ScrollView className="p-4" contentContainerStyle={{paddingBottom: 20}}>
+      <ScrollView className="p-4" contentContainerStyle={{}}>
         <View className="flex-1 bg-gray-100 p-4">
           <UserInfo firstname={data.firstname} lastname={data.lastname} email={data.email} />
           <View className="space-y-4">
             {
               Object.entries(modifiedData).map(([key, value], index) => {
-                // if (index < 4) {
-                //   return null;
-                // }
+                if (index < 4) {
+                  return null;
+                }
+                if (value === null) {
+                  value = 'N/A';
+                }
                 return <Info key={index} title={key} info={value} />;
               })
             }

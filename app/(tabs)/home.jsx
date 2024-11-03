@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Text, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../../components/Card';
 import Header from '../../components/Header';
 import * as SecureStore from 'expo-secure-store';
-import { router } from 'expo-router';
 
 export default function home() {
   const [storedToken, setStoredToken] = useState(null);
