@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../../components/Card';
 import Header from '../../components/Header';
 import * as SecureStore from 'expo-secure-store';
+import { router } from 'expo-router';
 
 export default function home() {
   const [storedToken, setStoredToken] = useState(null);
@@ -16,6 +17,23 @@ export default function home() {
       const refreshToken = await SecureStore.getItemAsync('refreshToken');
       setStoredToken(token);
       setStoredRefreshToken(refreshToken);
+      if (!token) {
+        fetch('https://mba.bsfaplikace.cz/Auth/refresh', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${refreshToken}`,
+          },
+        })
+        if (!response.ok) {
+          router.replace('/login');
+        } else {
+          const result = await response.json();
+          await SecureStore.setItemAsync('token', result.accessToken);
+          await SecureStore.setItemAsync('refreshToken', result.refreshToken);
+          setStoredToken(result.accessToken);
+          setStoredRefreshToken(result.refresh);
+        }
+      }
     };
     loadTokens();
   }, []);
@@ -32,7 +50,7 @@ export default function home() {
       setData(result);
     }
     infoContract();
-  })
+  }, [storedToken]);
 
   const card = data.map((card, index) => (
     <Card

@@ -78,30 +78,22 @@ export default function Profile() {
   }
 
   const modifiedData = {
-    jmeno: data.firstname,
-    prijmeni: data.lastname,
-    email: data.email,
-    telefon: data.mobile,
-    narozeniny: data.birthdate,
-    'trvale bydliste': data.permanentAddress,
-    'tehdejsi bydliste': data.correspondenceAddress
+    Email: data.email,
+    Telefon: data.mobile,
+    Narozeniny: data.birthday,
+    'Trvalá adresa': data.permanentAddress,
+    'Korespondenční adresa': data.correspondenceAddress
   }
 
   return (
     <SafeAreaView>
       <Header/>
-      <ScrollView className="p-4" contentContainerStyle={{}}>
+      <ScrollView className="p-4" contentContainerStyle={{ paddingBottom: 20 }}>
         <View className="flex-1 bg-gray-100 p-4">
           <UserInfo firstname={data.firstname} lastname={data.lastname} email={data.email} />
           <View className="space-y-4">
             {
               Object.entries(modifiedData).map(([key, value], index) => {
-                if (index < 4) {
-                  return null;
-                }
-                if (value === null) {
-                  value = 'N/A';
-                }
                 return <Info key={index} title={key} info={value} />;
               })
             }
@@ -114,7 +106,7 @@ export default function Profile() {
               <Text className="text-blue-500 text-center text-lg">{!(collapsed) ? 'Ukazat vic' : 'Ukazat min'}</Text>
             </TouchableOpacity>
           </View> */}
-          <TouchableOpacity className="mt-auto bg-red-600 p-4 rounded-lg shadow" onPress={logout}>
+          <TouchableOpacity className="mt-auto bg-red-600 p-4 rounded-lg shadow my-4" onPress={logout}>
             <Text className="text-white text-center text-lg">Odhlásit se</Text>
           </TouchableOpacity>
         </View>
