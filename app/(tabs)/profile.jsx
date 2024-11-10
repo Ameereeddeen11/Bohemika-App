@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
-import { router } from 'expo-router';
+import { router, Redirect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/Header';
 import UserInfo from '../../components/UserInfo';
 import * as SecureStore from 'expo-secure-store';
 import Info from '../../components/Info';
+import { useGlobalContext } from '../../context/GlobalProvider';
 
 export default function Profile() {
   const info2 = [
@@ -71,9 +72,11 @@ export default function Profile() {
   const submit = () => {
     setCollapsed(!collapsed);
   }
-  const logout = async () => {
-    await SecureStore.deleteItemAsync('token');
-    await SecureStore.deleteItemAsync('refreshToken');
+
+  const { logout } = useGlobalContext();
+
+  const handleLogout = async () => {
+    await logout();
     router.replace('/');
   }
 
@@ -106,7 +109,7 @@ export default function Profile() {
               <Text className="text-blue-500 text-center text-lg">{!(collapsed) ? 'Ukazat vic' : 'Ukazat min'}</Text>
             </TouchableOpacity>
           </View> */}
-          <TouchableOpacity className="mt-auto bg-red-600 p-4 rounded-lg shadow my-4" onPress={logout}>
+          <TouchableOpacity className="mt-auto bg-red-600 p-4 rounded-lg shadow my-4" onPress={handleLogout}>
             <Text className="text-white text-center text-lg">Odhlásit se</Text>
           </TouchableOpacity>
         </View>
