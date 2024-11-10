@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import { View, Image, TextInput, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, Redirect } from 'expo-router';
 import CustomButton from '../components/CustomButton';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import { useGlobalContext } from '../context/GlobalProvider';
 
 export default function Index() {
+
+    const { accessToken } = useGlobalContext();
+
+    if (accessToken) {
+        return <Redirect href="/home" />;
+    }
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
