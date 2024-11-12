@@ -19,9 +19,25 @@ export const GlobalProvider = ({ children }) => {
                 console.error("Failed to load tokens:", error);
             } finally {
                 setLoading(false);
+            };
+            if (!accessToken) {
+                fetch('https://mba.bsfaplikace.cz/Auth/refresh', {
+                    method: 'POST',
+                    headers: {
+                      'Authorization': `Bearer ${refreshToken}`,
+                    },
+                })
+            }
+            if (response.ok) {
+                const result = await response.json();
+                await SecureStore.setItemAsync('token', result.accessToken);
+                await SecureStore.setItemAsync('refreshToken', result.refreshToken);
+                setAccessToken(result.accessToken);
+                setRefreshToken(result.refreshToken);
+            } else {
+                router.replace('/login');
             }
         };
-    
         loadTokens();
     }, []);
 
