@@ -39,11 +39,21 @@ export default function home() {
   //   loadTokens();
   // }, []);
 
-  const { accessToken } = useGlobalContext();
+  // const { accessToken } = useGlobalContext();
+
+  // useEffect(() => {
+  //   setStoredToken(accessToken);
+  // }, [accessToken]);
 
   useEffect(() => {
-    setStoredToken(accessToken);
-  }, [accessToken]);
+    const loadTokens = async () => {
+      const token = await SecureStore.getItemAsync('token');
+      const refreshToken = await SecureStore.getItemAsync('refreshToken');
+      setStoredToken(token);
+      setStoredRefreshToken(refreshToken);
+    };
+    loadTokens();
+  }, []);
 
   useEffect(() => {
     const infoContract = async () => {

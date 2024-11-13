@@ -10,7 +10,7 @@ import { useGlobalContext } from '../../context/GlobalProvider';
 
 export default function Profile() {
   const [data, setData] = useState([]);
-  const [accesstoken, setToken] = useState('');
+  const [accesstoken, setToken] = useState();
   const [refreshToken, setRefreshToken] = useState('');
 
   const { accessToken, logout } = useGlobalContext();
@@ -20,10 +20,18 @@ export default function Profile() {
     router.replace('/');
   }
 
+  // useEffect(() => {
+  //   setToken(accessToken);
+  // }, [accessToken]);
+
   useEffect(() => {
-    setToken(accessToken);
-  }, [accessToken]);
-  
+    const loadTokens = async () => {
+      const token = await SecureStore.getItemAsync('token');
+      setToken(token);
+    };
+    loadTokens();
+  }, []);
+
   useEffect(() => {
     if (accesstoken) { 
       const fetchData = async () => {
