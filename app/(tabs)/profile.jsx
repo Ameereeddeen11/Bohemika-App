@@ -4,48 +4,28 @@ import { router, Redirect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/Header';
 import UserInfo from '../../components/UserInfo';
-import * as SecureStore from 'expo-secure-store';
+// import * as SecureStore from 'expo-secure-store';
 import Info from '../../components/Info';
 import { useGlobalContext } from '../../context/GlobalProvider';
 
 export default function Profile() {
-  const info2 = [
-    {
-      'title': 'Telefon',
-      'info': '+420 123 456 789'
-    },
-    {
-      'title': 'Adresa',
-      'info': 'Ulice 123, Město, PSČ'
-    },
-    {
-      'title': 'Číslo pojištění',
-      'info': '987654321'
-    },
-    {
-      'title': 'Trvale bydliste',
-      'info': 'Praha 7'
-    }
-  ]
-
   const [data, setData] = useState([]);
   const [accesstoken, setToken] = useState('');
   const [refreshToken, setRefreshToken] = useState('');
 
+  const { accessToken, logout } = useGlobalContext();
+
+  const handleLogout = async () => {
+    await logout();
+    router.replace('/');
+  }
+
   useEffect(() => {
-    const fetchData = async () => {
-      const token = await SecureStore.getItemAsync('token');
-      const refreshToken = await SecureStore.getItemAsync('refreshToken');
-      if (token) {
-        setToken(token);
-      }
-      setRefreshToken(refreshToken);
-    };
-    fetchData();
-  }, []);
+    setToken(accessToken);
+  }, [accessToken]);
   
   useEffect(() => {
-    if (accesstoken) { // Only fetch data if accesstoken is available
+    if (accesstoken) { 
       const fetchData = async () => {
         try {
           const response = await fetch('https://mba.bsfaplikace.cz/Client/profile', {
@@ -55,7 +35,7 @@ export default function Profile() {
             }
           });
           if (!response.ok) {
-            console.error("Error fetching profile data:", response.status, response.statusText);
+            console.error("Error fetching profile data");
             return;
           }
           const data2 = await response.json();
@@ -71,13 +51,6 @@ export default function Profile() {
   const [collapsed, setCollapsed] = useState(false);
   const submit = () => {
     setCollapsed(!collapsed);
-  }
-
-  const { logout } = useGlobalContext();
-
-  const handleLogout = async () => {
-    await logout();
-    router.replace('/');
   }
 
   const modifiedData = {

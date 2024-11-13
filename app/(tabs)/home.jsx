@@ -5,38 +5,45 @@ import Card from '../../components/Card';
 import Header from '../../components/Header';
 import * as SecureStore from 'expo-secure-store';
 import { router } from 'expo-router';
+import { useGlobalContext } from '../../context/GlobalProvider';
 
 export default function home() {
   const [storedToken, setStoredToken] = useState(null);
   const [storedRefreshToken, setStoredRefreshToken] = useState(null);
   const [data, setData] = useState([]);
 
+  // useEffect(() => {
+  //   const loadTokens = async () => {
+  //     const token = await SecureStore.getItemAsync('token');
+  //     const refreshToken = await SecureStore.getItemAsync('refreshToken');
+  //     setStoredToken(token);
+  //     setStoredRefreshToken(refreshToken);
+  //     if (!token) {
+  //       fetch('https://mba.bsfaplikace.cz/Auth/refresh', {
+  //         method: 'POST',
+  //         headers: {
+  //           'Authorization': `Bearer ${refreshToken}`,
+  //         },
+  //       })
+  //       if (!response.ok) {
+  //         router.replace('/login');
+  //       } else {
+  //         const result = await response.json();
+  //         await SecureStore.setItemAsync('token', result.accessToken);
+  //         await SecureStore.setItemAsync('refreshToken', result.refreshToken);
+  //         setStoredToken(result.accessToken);
+  //         setStoredRefreshToken(result.refresh);
+  //       }
+  //     }
+  //   };
+  //   loadTokens();
+  // }, []);
+
+  const { accessToken } = useGlobalContext();
+
   useEffect(() => {
-    const loadTokens = async () => {
-      const token = await SecureStore.getItemAsync('token');
-      const refreshToken = await SecureStore.getItemAsync('refreshToken');
-      setStoredToken(token);
-      setStoredRefreshToken(refreshToken);
-      if (!token) {
-        fetch('https://mba.bsfaplikace.cz/Auth/refresh', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${refreshToken}`,
-          },
-        })
-        if (!response.ok) {
-          router.replace('/login');
-        } else {
-          const result = await response.json();
-          await SecureStore.setItemAsync('token', result.accessToken);
-          await SecureStore.setItemAsync('refreshToken', result.refreshToken);
-          setStoredToken(result.accessToken);
-          setStoredRefreshToken(result.refresh);
-        }
-      }
-    };
-    loadTokens();
-  }, []);
+    setStoredToken(accessToken);
+  }, [accessToken]);
 
   useEffect(() => {
     const infoContract = async () => {
