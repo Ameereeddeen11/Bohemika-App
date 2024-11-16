@@ -38,6 +38,26 @@ export const GlobalProvider = ({ children }) => {
         loadTokens();
     }, []);
 
+    const accessToken2 = async () => {
+        const response = await fetch('https://mba.bsfaplikace.cz/Auth/refresh', {
+            method: 'POST',
+            headers: {
+                "Authorization": `Bearer ${refreshToken}`,
+            },
+        });
+        if (response.ok) {
+            const result = await response.json();
+            await SecureStore.deleteItemAsync('token');
+            await SecureStore.deleteItemAsync('refreshToken');
+            await SecureStore.setItemAsync('token', result.accessToken);
+            await SecureStore.setItemAsync('refreshToken', result.refreshToken);
+            setAccessToken(result.accessToken);
+            setRefreshToken(result.refreshToken);
+        } else {
+            router.replace('/login');
+        }
+    }
+
     const logout = async () => {
         try {
             await SecureStore.deleteItemAsync('token');
