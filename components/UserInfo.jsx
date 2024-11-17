@@ -9,7 +9,6 @@ export default function UserInfo(props) {
               className="w-32 h-32 rounded-full"
             />
             <Text className="mt-4 text-xl font-semibold">{props.firstname} {props.lastname}</Text>
-            <Text className="text-gray-600">{props.email}</Text>
         </View>
     )
 }

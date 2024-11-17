@@ -38,24 +38,8 @@ export const GlobalProvider = ({ children }) => {
         loadTokens();
     }, []);
 
-    const accessToken2 = async () => {
-        const response = await fetch('https://mba.bsfaplikace.cz/Auth/refresh', {
-            method: 'POST',
-            headers: {
-                "Authorization": `Bearer ${refreshToken}`,
-            },
-        });
-        if (response.ok) {
-            const result = await response.json();
-            await SecureStore.deleteItemAsync('token');
-            await SecureStore.deleteItemAsync('refreshToken');
-            await SecureStore.setItemAsync('token', result.accessToken);
-            await SecureStore.setItemAsync('refreshToken', result.refreshToken);
-            setAccessToken(result.accessToken);
-            setRefreshToken(result.refreshToken);
-        } else {
-            router.replace('/login');
-        }
+    const getaccessToken = async () => {
+        return await SecureStore.getItemAsync('token');
     }
 
     const logout = async () => {
@@ -70,7 +54,7 @@ export const GlobalProvider = ({ children }) => {
     };
 
     return (
-        <GlobalContext.Provider value={{ accessToken, refreshToken, logout }}>
+        <GlobalContext.Provider value={{ accessToken, logout, getaccessToken }}>
             {children}
         </GlobalContext.Provider>
     );
