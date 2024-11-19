@@ -1,90 +1,90 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Card from '../../components/Card';
+import { ScrollView, Text, SafeAreaView, StyleSheet } from 'react-native';
 import Header from '../../components/Header';
 import * as SecureStore from 'expo-secure-store';
-import { router } from 'expo-router';
-import { useGlobalContext } from '../../context/GlobalProvider';
+import CollapsibleCategory from '../../components/CollapsibleCategory';
 
-export default function home() {
+export default function Home() {
   const [storedToken, setStoredToken] = useState(null);
-  const [storedRefreshToken, setStoredRefreshToken] = useState(null);
   const [data, setData] = useState([]);
+  const [groupedData, setGroupedData] = useState({});
+  const [openCategory, setOpenCategory] = useState(null);
 
-  // useEffect(() => {
-  //   const loadTokens = async () => {
-  //     const token = await SecureStore.getItemAsync('token');
-  //     const refreshToken = await SecureStore.getItemAsync('refreshToken');
-  //     setStoredToken(token);
-  //     setStoredRefreshToken(refreshToken);
-  //     if (!token) {
-  //       fetch('https://mba.bsfaplikace.cz/Auth/refresh', {
-  //         method: 'POST',
-  //         headers: {
-  //           'Authorization': `Bearer ${refreshToken}`,
-  //         },
-  //       })
-  //       if (!response.ok) {
-  //         router.replace('/login');
-  //       } else {
-  //         const result = await response.json();
-  //         await SecureStore.setItemAsync('token', result.accessToken);
-  //         await SecureStore.setItemAsync('refreshToken', result.refreshToken);
-  //         setStoredToken(result.accessToken);
-  //         setStoredRefreshToken(result.refresh);
-  //       }
-  //     }
-  //   };
-  //   loadTokens();
-  // }, []);
-
-  // const { accessToken } = useGlobalContext();
-
-  // useEffect(() => {
-  //   setStoredToken(accessToken);
-  // }, [accessToken]);
-
+  // Načítání tokenů
   useEffect(() => {
     const loadTokens = async () => {
       const token = await SecureStore.getItemAsync('token');
-      const refreshToken = await SecureStore.getItemAsync('refreshToken');
       setStoredToken(token);
-      setStoredRefreshToken(refreshToken);
     };
     loadTokens();
   }, []);
 
+  // Načítání dat
   useEffect(() => {
     const infoContract = async () => {
-      const response = await fetch('https://mba.bsfaplikace.cz/Contract', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${storedToken}`,
-        },
-      })
-      const result = await response.json();
-      setData(result);
-    }
+      if (!storedToken) return; // Kontrola, zda je token dostupný
+      try {
+        const response = await fetch('https://mba.bsfaplikace.cz/Contract', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+          },
+        });
+        if (!response.ok) throw new Error('Failed to fetch data');
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        console.error(error);
+      }
+    };
     infoContract();
   }, [storedToken]);
 
-  const card = data.map((card, index) => (
-    <Card
-      key={index}
-      number={card.number}
-      nazev={card.product}
-      platnostOd={card.dateValidityFrom.split('T')[0]}
-      platnostDo={card.dateValidityTo.split('T')[0]}
-    />
-  ));
+  // Seskupení dat podle kategorie
+  useEffect(() => {
+    const groupByCategory = (data) => {
+      return data.reduce((acc, item) => {
+        const category = item.institution;
+        if (!acc[category]) acc[category] = [];
+        acc[category].push(item);
+        return acc;
+      }, {});
+    };
+    setGroupedData(groupByCategory(data));
+  }, [data]);
+
+  // Přepínání kategorie
+  const toggleCategory = (category) => {
+    setOpenCategory(category === openCategory ? null : category);
+  };
 
   return (
     <SafeAreaView>
-      <Header />
-      <ScrollView className="p-4" contentContainerStyle={{ paddingBottom: 20 }}>
-        {card}
+      <Header key={1} />
+      <ScrollView
+        className="p-4"
+        contentContainerStyle={{ paddingBottom: 20 }}
+        keyboardShouldPersistTaps="handled"
+        nestedScrollEnabled
+      >
+        {Object.keys(groupedData).map((category) => (
+          <CollapsibleCategory
+            key={category}
+            category={category}
+            data={groupedData[category]}
+            isOpen={openCategory === category}
+            toggleCategory={() => toggleCategory(category)}
+          />
+        ))}
       </ScrollView>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    borderRadius: 5,
+  },
+});

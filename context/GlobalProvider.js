@@ -32,7 +32,9 @@ export const GlobalProvider = ({ children }) => {
                 setAccessToken(result.accessToken);
                 setRefreshToken(result.refreshToken);
             } else {
-                router.replace('/login');
+                await SecureStore.deleteItemAsync('token');
+                await SecureStore.deleteItemAsync('refreshToken');
+                router.replace('/');
             }
         };
         loadTokens();
