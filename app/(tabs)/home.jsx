@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, SafeAreaView, StyleSheet } from 'react-native';
+import { ScrollView, Text, StyleSheet, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/Header';
 import * as SecureStore from 'expo-secure-store';
 import CollapsibleCategory from '../../components/CollapsibleCategory';
+import { router } from 'expo-router';
 
 export default function Home() {
   const [storedToken, setStoredToken] = useState(null);
@@ -30,9 +32,14 @@ export default function Home() {
             Authorization: `Bearer ${storedToken}`,
           },
         });
-        if (!response.ok) throw new Error('Failed to fetch data');
-        const result = await response.json();
-        setData(result);
+        if (!response.ok) {
+          await SecureStore.deleteItemAsync('token');
+          await SecureStore.deleteItemAsync('refreshToken');
+          router.replace('/');
+        } else {
+          const result = await response.json();
+          setData(result);
+        }
       } catch (error) {
         console.error(error);
       }

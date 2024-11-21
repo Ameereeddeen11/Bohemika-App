@@ -1,16 +1,3 @@
-// import React from 'react';
-// import {
-//   StyleSheet,
-//   ScrollView,
-//   Text,
-//   TouchableOpacity,
-//   View
-// } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Header from '../../components/Header';
-
 // const lessons = [
 //   {
 //     name: 'Squat',
@@ -87,9 +74,12 @@ import Header from '../../components/Header';
 //   );
 // }
 
-
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Header from '../../components/Header';
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import List from '../../components/List';
+import { View, Text, TouchableOpacity } from 'react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const data = [
   { id: '1', repo: 'Bohemika-App', title: 'home page', time: '1d' },
@@ -97,44 +87,34 @@ const data = [
 ];
 
 export default function Create() {
-  
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-        className='flex-row justify-between items-center p-4 border-b border-gray-200'
-    >
-      <View>
-        <Text className='text-sm font-semibold text-black'>
-          {item.repo}
-        </Text>
-        <Text className='text-lg text-black'>{item.title}</Text>
-      </View>
-      <Text className='text-black text-xs'>{item.time}</Text>
-    </TouchableOpacity>
-  );
-
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
-       <Header />
-       <ScrollView
-        className="p-4"
-        contentContainerStyle={{ paddingBottom: 20 }}
-        keyboardShouldPersistTaps="handled"
-        nestedScrollEnabled
-      >
-        <View className='flex-1'>
-          <View className={('flex-row justify-around mb-2 px-4')}>
-            <Text className={('text-black')}>Open</Text>
-            <Text className={('text-black')}>Created by me</Text>
-            <Text className={('text-black')}>Visibility</Text>
-            <Text className={('text-black')}>Organization</Text>
+    <SafeAreaView>
+      <Header />
+      <View className="flex-row items-center justify-between p-4 border-b border-gray-400">
+        <Text className="text-2xl font-semibold text-gray-800 p-4">Repositories</Text>
+        <TouchableOpacity
+          className="bg-blue-600 px-4 py-2 rounded-lg shadow-sm hover:bg-blue-700 active:bg-blue-800"
+          onPress={() => alert('Nahrávat dokument')}
+        >
+          <View className="flex-row items-center justify-between">
+            <AntDesign name='pluscircleo' size={14} color="white" />
+            <Text className="text-white text-sm font-semibold tracking-wide px-2">
+              Nahrát
+            </Text>
           </View>
-          <FlatList
-            data={data}
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-          />
-        </View>
-      </ScrollView>
+        </TouchableOpacity>
+      </View>
+      {/* <View className="flex-row justify-around mb-2 px-4 py-4">
+        
+      </View> */}
+      {data.map((item, key) => (
+        <List
+          key={key}
+          repo={item.repo}
+          title={item.title}
+          time={item.time}
+        />
+      ))}
     </SafeAreaView>
   );
 }
