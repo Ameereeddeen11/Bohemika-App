@@ -1,26 +1,3 @@
-// const lessons = [
-//   {
-//     name: 'Squat',
-//     cal: 22,
-//     duration: 10,
-//   },
-//   {
-//     name: 'Pull-up',
-//     cal: 12,
-//     duration: 15,
-//   },
-//   {
-//     name: 'Push-up',
-//     cal: 12,
-//     duration: 5,
-//   },
-//   {
-//     name: 'Calisthenics',
-//     cal: 33,
-//     duration: 12,
-//   }
-// ];
-
 // export default function Create() {
 //   return (
 //     <SafeAreaView className="flex-1 bg-gray-50">
@@ -82,8 +59,9 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const data = [
-  { id: '1', repo: 'Bohemika-App', title: 'home page', time: '1d' },
-  { id: '2', repo: 'recipe', title: 'docker compose is working but logout isn\'t', time: '9d' },
+  { id: '1', repo: 'Bohemika-App', title: 'Vas dokument', time: '1d', progress: false },
+  { id: '2', repo: 'recipe', title: 'Vas dokument', time: '9d', progress: true },
+  { id: '3', repo: 'Bohemika-App', title: 'Vas dokument', time: '1d', progress: true },
 ];
 
 export default function Create() {
@@ -91,7 +69,7 @@ export default function Create() {
     <SafeAreaView>
       <Header />
       <View className="flex-row items-center justify-between p-4 border-b border-gray-400">
-        <Text className="text-2xl font-semibold text-gray-800 p-4">Repositories</Text>
+        <Text className="text-2xl font-semibold text-gray-800 mx-2 my-2">Dokumenty</Text>
         <TouchableOpacity
           className="bg-blue-600 px-4 py-2 rounded-lg shadow-sm hover:bg-blue-700 active:bg-blue-800"
           onPress={() => alert('Nahrávat dokument')}
@@ -113,6 +91,7 @@ export default function Create() {
           repo={item.repo}
           title={item.title}
           time={item.time}
+          progress={item.progress}
         />
       ))}
     </SafeAreaView>
