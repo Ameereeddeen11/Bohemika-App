@@ -9,5 +9,6 @@ expo-env.d.ts
 dist/
 
 .expo/
+.idea/
 
 package-lock.json
