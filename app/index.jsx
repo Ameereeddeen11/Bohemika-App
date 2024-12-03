@@ -16,7 +16,7 @@ export default function Index() {
     }
 
     const handleEnter = async () => {
-      router.push('/enter-email');
+      router.push('(auth)/enter-email');
     }
 
     const [username, setUsername] = useState('');
@@ -82,8 +82,8 @@ export default function Index() {
                             placeholderTextColor="#aaa"
                         />
                         <CustomButton title="Přihlasit se" handlePress={handleLogin} />
-                        <TouchableOpacity className="mt-auto bg-red-600 p-4 rounded-lg shadow my-4" onPress={handleEnter}>
-                            <Text className="text-white text-center text-lg">Reset Password</Text>
+                        <TouchableOpacity className="mt-auto p-4 rounded-lg my-4" onPress={handleEnter}>
+                            <Text className="text-sky-400/100 text-center text-lg">Reset Password</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>

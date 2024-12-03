@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import {
   StyleSheet,
-  SafeAreaView,
   View,
   Text,
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 // import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { router } from 'expo-router';
@@ -24,7 +24,9 @@ export default function ResetPassword() {
 
   const handleNext = async () => {
       try {
+            console.lop(email);
           const response = await axios.post('https://mba.bsfaplikace.cz/Auth/forgot-password', { email });
+          console.log(response);
           router.push('/reset-password');
       } catch (error) {
             Alert.alert('Chyba', 'Nepodařilo se obnovit heslo');
@@ -32,9 +34,8 @@ export default function ResetPassword() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }} className="bg-gray-100">
-{/*       <KeyboardAwareScrollView style={styles.container}> */}
-    <KeyboardAvoidingView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+        <KeyboardAvoidingView style={{ flex: 1 }}>
         <View style={styles.header}>
           <View style={styles.headerBack}>
             <TouchableOpacity onPress={handleBack}>
@@ -96,7 +97,6 @@ export default function ResetPassword() {
           </View>
         </View>
     </KeyboardAvoidingView>
-{/*       </KeyboardAwareScrollView> */}
 
       <TouchableOpacity
         onPress={() => {
