@@ -5,91 +5,75 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { router } from 'expo-router';
+import CustomButton from '../../components/CustomButton';
+import axios from 'axios';
 
 export default function EnterEmail() {
-  const [form, setForm] = useState({
-    email: '',
-  });
+  const [email, setEmail] = useState('');
 
   const handleBack = () => {
-    // go back to previous screen
     router.back();
-  }
+  };
 
   const handleNext = async () => {
-        try {
-              console.lop(email);
-            const response = await axios.post('https://mba.bsfaplikace.cz/Auth/forgot-password', { email });
-            console.log(response);
-            router.push('/reset-password');
-        } catch (error) {
-              Alert.alert('Chyba', 'Nepodařilo se obnovit heslo');
-        }
+    try {
+      console.log(email);
+      const response = await axios.post('https://mba.bsfaplikace.cz/Auth/forgot-password', { email });
+      console.log(response.status);
+      router.push('(auth)/reset-password');
+    } catch (error) {
+      Alert.alert('Chyba', 'Nepodařilo se obnovit heslo');
     }
+  };
 
   return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-            <KeyboardAvoidingView style={{ flex: 1 }}>
-            <View style={styles.header}>
-              <View style={styles.headerBack}>
-                <TouchableOpacity onPress={handleBack}>
-                <FeatherIcon
-                  color="#1D2A32"
-                  name="chevron-left"
-                  size={30} />
-                </TouchableOpacity>
-              </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <KeyboardAvoidingView style={{ flex: 1 }}>
+        <View style={styles.header}>
+          <View style={styles.headerBack}>
+            <TouchableOpacity onPress={handleBack}>
+              <FeatherIcon color="#1D2A32" name="chevron-left" size={30} />
+            </TouchableOpacity>
+          </View>
 
-              <Text style={styles.title}>Forgot password?</Text>
+          <Text style={styles.title}>Forgot password?</Text>
+          <Text style={styles.subtitle}>Enter the email associated with your account.</Text>
+        </View>
 
-              <Text style={styles.subtitle}>
-                Enter the email associated with your account.
-              </Text>
-            </View>
+        <View style={styles.form}>
+          <View style={styles.input}>
+            <Text style={styles.inputLabel}>Email Address</Text>
+            <TextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              clearButtonMode="while-editing"
+              keyboardType="email-address"
+              onChangeText={setEmail}
+              placeholder="vas@email.com"
+              placeholderTextColor="#6b7280"
+              style={styles.inputControl}
+              value={email}
+            />
+          </View>
 
-            <View style={styles.form}>
-              <View style={styles.input}>
-                <Text style={styles.inputLabel}>Email Address</Text>
+          <View style={styles.formAction}>
+            <CustomButton title="Přihlasit se" handlePress={handleNext} />
+          </View>
+        </View>
 
-                <TextInput
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  clearButtonMode="while-editing"
-                  keyboardType="email-address"
-                  onChangeText={email => setForm({ ...form, email })}
-                  placeholder="john@example.com"
-                  placeholderTextColor="#6b7280"
-                  style={styles.inputControl}
-                  value={form.email} />
-              </View>
-
-              <View style={styles.formAction}>
-                <TouchableOpacity
-                  onPress={handleNext()}>
-                  <View style={styles.btn}>
-                    <Text style={styles.btnText}>Next</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-    {/*       </KeyboardAwareScrollView> */}
-
-          <TouchableOpacity
-            onPress={() => {
-              // handle link
-            }}>
-            <Text style={styles.formFooter}>
-              Already have an account?{' '}
-              <Text style={{ textDecorationLine: 'underline' }}>Sign in</Text>
-            </Text>
-          </TouchableOpacity>
-        </KeyboardAvoidingView>
+        <TouchableOpacity onPress={() => {}}>
+          <Text style={styles.formFooter}>
+            Already have an account?{' '}
+            <Text style={{ textDecorationLine: 'underline' }}>Sign in</Text>
+          </Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

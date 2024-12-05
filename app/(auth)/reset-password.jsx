@@ -11,11 +11,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 // import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { router } from 'expo-router';
+import CustomButton from '../../components/CustomButton';
 
 export default function ResetPassword() {
-  const [form, setForm] = useState({
-    email: '',
-  });
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleBack = () => {
     // go back to previous screen
@@ -24,7 +24,7 @@ export default function ResetPassword() {
 
   const handleNext = async () => {
       try {
-            console.lop(email);
+          console.lop(email);
           const response = await axios.post('https://mba.bsfaplikace.cz/Auth/forgot-password', { email });
           console.log(response);
           router.push('/reset-password');
@@ -58,42 +58,34 @@ export default function ResetPassword() {
             <Text style={styles.inputLabel}>Email Address</Text>
 
             <TextInput
+                autoCapitalize="none"
+                autoCorrect={false}
+                clearButtonMode="while-editing"
+                keyboardType="password"
+                onChangeText={setPassword}
+                placeholder="novy heslo"
+                placeholderTextColor="#6b7280"
+                style={styles.inputControl}
+                value={password}
+                className={`my-3`}
+                secureTextEntry
+            />
+            <TextInput
               autoCapitalize="none"
               autoCorrect={false}
               clearButtonMode="while-editing"
               keyboardType="password"
-              onChangeText={email => setForm({ ...form, email })}
-              placeholder="Enter Password"
+              onChangeText={setConfirmPassword}
+              placeholder="potvrdit heslo"
               placeholderTextColor="#6b7280"
               style={styles.inputControl}
-              value={form.email}
-            />
-            <TextInput
-                style={{
-                    height: 50,
-                    backgroundColor: 'white',
-                    paddingHorizontal: 10,
-                    marginBottom: 15,
-                    borderRadius: 10,
-                    borderColor: '#ccc',
-                    borderWidth: 1,
-                    fontSize: 16,
-                }}
-                placeholder="Heslo"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                placeholderTextColor="#aaa"
+              value={confirmPassword}
+              secureTextEntry
             />
           </View>
 
           <View style={styles.formAction}>
-            <TouchableOpacity
-              onPress={handleNext()}>
-              <View style={styles.btn}>
-                <Text style={styles.btnText}>Next</Text>
-              </View>
-            </TouchableOpacity>
+            <CustomButton title="Potvrdit" handlePress={handleNext} />
           </View>
         </View>
     </KeyboardAvoidingView>
