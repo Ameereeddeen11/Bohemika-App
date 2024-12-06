@@ -26,7 +26,7 @@ export default function EnterEmail() {
       console.log(email);
       const response = await axios.post('https://mba.bsfaplikace.cz/Auth/forgot-password', { email });
       console.log(response.status);
-      router.push('(auth)/reset-password');
+      router.push('(auth)/email-sended');
     } catch (error) {
       Alert.alert('Chyba', 'Nepodařilo se obnovit heslo');
     }
@@ -63,7 +63,7 @@ export default function EnterEmail() {
           </View>
 
           <View style={styles.formAction}>
-            <CustomButton title="Přihlasit se" handlePress={handleNext} />
+            <CustomButton title="Poslat Email" handlePress={handleNext} />
           </View>
         </View>
 
