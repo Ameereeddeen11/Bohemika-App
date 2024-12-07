@@ -5,7 +5,11 @@
     "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/logo2.png",
-    "scheme": "myapp",
+    "scheme": "bohemika",
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/logo2.png",
@@ -13,7 +17,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bohemika.app"
     },
     "android": {
       "package": "com.bohemika.app",

@@ -6,11 +6,12 @@ import {
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 // import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import CustomButton from '../../components/CustomButton';
 
 export default function ResetPassword() {
@@ -22,14 +23,33 @@ export default function ResetPassword() {
     router.back();
   }
 
+  const token = useLocalSearchParams();
+  console.log(token);
+
   const handleNext = async () => {
+      if(password !== confirmPassword) {
+        Alert.alert('Chyba', 'Hesla se neshodují');
+        return;
+      }
       try {
-          console.lop(email);
-          const response = await axios.post('https://mba.bsfaplikace.cz/Auth/forgot-password', { email });
-          console.log(response);
-          router.push('/reset-password');
-      } catch (error) {
+        console.log(password);
+        const response = await fetch('https://mba.bsfaplikace.cz/Auth/reset-password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ password, token }),
+        });
+        console.log(response.status);
+        const data = await response.json();
+        if (response.status === 200) {
+            console.log(data);
+            router.push('/');
+        } else {
             Alert.alert('Chyba', 'Nepodařilo se obnovit heslo');
+        }
+      } catch (error) {
+        Alert.alert('Chyba', 'Nepodařilo se obnovit heslo');
       }
   }
 
