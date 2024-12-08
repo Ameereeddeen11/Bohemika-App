@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image, TextInput, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Image, TextInput, ScrollView, Alert, KeyboardAvoidingView, Platform, TouchableOpacity, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, Redirect } from 'expo-router';
 import CustomButton from '../components/CustomButton';
@@ -13,6 +13,10 @@ export default function Index() {
 
     if (accessToken) {
         return <Redirect href="/home" />;
+    }
+
+    const handleEnter = async () => {
+      router.push('(auth)/enter-email');
     }
 
     const [username, setUsername] = useState('');
@@ -78,6 +82,9 @@ export default function Index() {
                             placeholderTextColor="#aaa"
                         />
                         <CustomButton title="Přihlasit se" handlePress={handleLogin} />
+                        <TouchableOpacity className="mt-auto p-4 rounded-lg my-4" onPress={handleEnter}>
+                            <Text className="text-sky-400/100 text-center text-lg">Reset Password</Text>
+                        </TouchableOpacity>
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
