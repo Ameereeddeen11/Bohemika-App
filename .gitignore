@@ -10,5 +10,7 @@ dist/
 
 .expo/
 .idea/
+android/
+ios/
 
 package-lock.json
