@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "Bohemika App",
-    "slug": "bohemika-app-zvm5wx1nii0je6hirmrd",
-    "version": "0.0.1",
+    "slug": "bohemika-app",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo2.png",
     "scheme": "bohemika",
@@ -11,22 +11,21 @@
       "android"
     ],
     "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/logo2.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.bohemika.app"
+      "supportsTablet": true
     },
     "android": {
-      "package": "com.bohemika.app",
-      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.bohemika.app"
     },
     "web": {
       "bundler": "metro",
@@ -44,18 +43,6 @@
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "eas": {
-        "projectId": "1afe2d6a-0333-462c-b8f4-366de2df7c27"
-      }
-    },
-    "owner": "amiriddin",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/1afe2d6a-0333-462c-b8f4-366de2df7c27"
     }
   }
 }
